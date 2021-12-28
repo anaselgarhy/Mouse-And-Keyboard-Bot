@@ -1,0 +1,146 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "com.anas.code" {
+    package "loggers" {
+        interface "Key" {
+            + getCode() : int
+            + getDuration() : long
+            + getKeyName() : String
+            + getPressTime() : long
+            + getReleaseTime() : long
+            + setPressTime(long) : void
+            + setReleaseTime(long) : void
+            + toString() : String
+        }
+
+        abstract class "Logger" implements java.lang.Runnable {
+            # keys : ArrayList<Key>
+            # keyBuffer : Map<Integer, Integer>
+
+            + Logger()
+            + addKey(Key) : void
+            + getKey(int) : Key
+            + removeKey(int) : void
+            + getIndex() : int
+            + start() : void
+            + stop() : void
+        }
+
+        Logger *-- Key
+
+        package "keyboard" {
+            class "KeyboardKey" implements Key {
+                - pressTime : long
+                - releaseTime : long
+
+                + KeyboardKey(NativeKeyEvent)
+                + getCode() : int
+                + getDuration() : long
+                + getKeyName() : String
+                + getPressTime() : long
+                + getReleaseTime() : long
+                + setPressTime(long) : void
+                + setReleaseTime(long) : void
+                + toString() : String
+            }
+            ' extends com.github.kwhat.jnativehook.keyboard.NativeKeyEvent
+            KeyboardKey --|> com.github.kwhat.jnativehook.keyboard.NativeKeyEvent
+
+            class "KeyboardLogger" extends Logger {
+                + nativeKeyPressed(NativeKeyEvent) : void
+                + nativeKeyReleased(NativeKeyEvent) : void
+                + nativeKeyTyped(NativeKeyEvent) : void
+                + run() : void
+                + start() : void
+                + stop() : void
+            }
+            ' implements com.github.kwhat.jnativehook.keyboard.NativeKeyListener
+            KeyboardLogger ..|> com.github.kwhat.jnativehook.keyboard.NativeKeyListener
+
+            KeyboardLogger *-- KeyboardKey
+
+        }
+        package "mouse" {
+            class "MouseKey" implements Key {
+                - pressTime : long
+                - releaseTime : long
+
+                + MouseKey(NativeMouseEvent)
+                + getCode() : int
+                + getDuration() : long
+                + getKeyName() : String
+                + getPressTime() : long
+                + getReleaseTime() : long
+                + setPressTime(long) : void
+                + setReleaseTime(long) : void
+                + toString() : String
+            }
+            '  extends com.github.kwhat.jnativehook.mouse.NativeMouseEvent
+            MouseKey --|> com.github.kwhat.jnativehook.mouse.NativeMouseEvent
+
+            class "MouseLogger" extends Logger {
+                - wheelEvents : ArrayList<MouseWheel>
+                - mouseMoves : ArrayList<MouseMove>
+
+                + MouseLogger()
+                + nativeMouseClicked(NativeMouseEvent) : void
+                + nativeMousePressed(NativeMouseEvent) : void
+                + nativeMouseReleased(NativeMouseEvent) : void
+                + nativeMouseMoved(NativeMouseEvent) : void
+                + nativeMouseDragged(NativeMouseEvent) : void
+                + nativeMouseWheelMoved(NativeMouseWheelEvent) : void
+                + run() : void
+                + start() : void
+                + stop() : void
+            }
+            '  implements com.github.kwhat.jnativehook.mouse.NativeMouseListener, com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener, com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener
+            MouseLogger ..|> com.github.kwhat.jnativehook.mouse.NativeMouseListener
+            MouseLogger ..|> com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener
+            MouseLogger ..|> com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener
+
+            class "MouseWheel" implements Key {
+                + MouseWheel(NativeMouseWheelEvent)
+                + getScrollAmount() : int
+                + getScrollType() : int
+                + getWheelRotation() : int
+                + getWheelRotationMode() : int
+                + getWheelRotationUnits() : int
+                + getCode() : int
+                + getDuration() : long
+                + getKeyName() : String
+                + getPressTime() : long
+                + getReleaseTime() : long
+                + setPressTime(long) : void
+                + setReleaseTime(long) : void
+                + toString() : String
+            }
+            '  extends com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent
+            MouseWheel --|> com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent
+
+            enum "Type" {
+                MOVED,
+                DRAGGED
+            }
+
+            class "MouseMove" {
+                - x : int
+                - y : int
+                - type : Type
+
+                + MouseMove(NativeMouseEvent)
+                + getX() : int
+                + getY() : int
+                + getType() : Type
+                + getPoint() : Point
+            }
+            MouseMove *-- Type
+
+            MouseLogger *-- MouseKey
+            MouseLogger *-- MouseWheel
+            MouseLogger *-- MouseMove
+        }
+    }
+}
+
+@enduml
