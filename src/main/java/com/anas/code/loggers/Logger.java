@@ -1,4 +1,4 @@
-package code.logger;
+package com.anas.code.loggers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

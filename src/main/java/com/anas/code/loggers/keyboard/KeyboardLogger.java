@@ -1,5 +1,7 @@
-package code.logger;
+package com.anas.code.loggers.keyboard;
 
+import com.anas.code.loggers.Key;
+import com.anas.code.loggers.Logger;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
@@ -38,11 +40,11 @@ public class KeyboardLogger extends Logger implements NativeKeyListener {
         // Check if the key is not already in the buffer or the buffer is empty.
         if (!keyBuffer.containsKey(nativeKeyEvent.getKeyCode()) || keyBuffer.isEmpty()) {
             // Store the key pressed.
-            Key key = new Key(nativeKeyEvent.getKeyCode(), Key.From.KEYBOARD);
+            KeyboardKey key = new KeyboardKey(nativeKeyEvent);
             // Add current time to the key.
-            key.setPressedTime(System.currentTimeMillis());
+            key.setPressTime(System.currentTimeMillis());
             // print current time.
-            System.out.println("key.getPressedTime() = " + key.getPressedTime());
+            System.out.println("key.getPressedTime() = " + key.getPressTime());
             // Add the key to the list of keys.
             addKey(key);
             // Add the key to buffer.
@@ -62,9 +64,9 @@ public class KeyboardLogger extends Logger implements NativeKeyListener {
     @Override
     public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
         // Add current time to the key.
-        getKey(keyBuffer.get(nativeKeyEvent.getKeyCode())).setReleasedTime(System.currentTimeMillis());
+        getKey(keyBuffer.get(nativeKeyEvent.getKeyCode())).setReleaseTime(System.currentTimeMillis());
         // print current time.
-        System.out.println("key.getReleasedTime() = " + getKey(keyBuffer.get(nativeKeyEvent.getKeyCode())).getReleasedTime());
+        System.out.println("key.getReleasedTime() = " + getKey(keyBuffer.get(nativeKeyEvent.getKeyCode())).getReleaseTime());
         // Remove the key from the buffer.
         keyBuffer.remove(nativeKeyEvent.getKeyCode());
         System.out.println("Key released.");
