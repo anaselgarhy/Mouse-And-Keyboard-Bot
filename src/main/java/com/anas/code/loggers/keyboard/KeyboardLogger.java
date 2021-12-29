@@ -9,6 +9,22 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 public class KeyboardLogger extends Logger implements NativeKeyListener {
 
+    // Singleton pattern.
+    // The instance of the logger.
+    private static KeyboardLogger instance = null;
+
+    // The constructor.
+    private KeyboardLogger() {
+        super();
+    }
+
+    // The getInstance method.
+    public static KeyboardLogger getInstance() {
+        if (instance == null) {
+            instance = new KeyboardLogger();
+        }
+        return instance;
+    }
     @Override
     public void start() {
         try {

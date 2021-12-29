@@ -12,11 +12,22 @@ public class MouseLogger extends Logger implements NativeMouseListener, NativeMo
     private ArrayList<MouseWheel> wheelEvents;
     private ArrayList<MouseMove> mouseMoves;
 
+    // Singleton pattern.
+    // The instance of the class.
+    private static MouseLogger instance = null;
     // Constructor
-    public MouseLogger() {
+    private MouseLogger() {
         super();
         wheelEvents = new ArrayList<>();
         mouseMoves = new ArrayList<>();
+    }
+
+    // Get the instance of the class.
+    public static MouseLogger getInstance() {
+        if (instance == null) {
+            instance = new MouseLogger();
+        }
+        return instance;
     }
 
     @Override
