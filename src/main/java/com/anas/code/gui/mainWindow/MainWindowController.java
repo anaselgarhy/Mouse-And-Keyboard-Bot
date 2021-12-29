@@ -5,10 +5,22 @@ import com.anas.code.Controller;
 public class MainWindowController {
     private final MainWindow mainWindow;
     private final Controller controller;
-    public MainWindowController(MainWindow mainWindow) {
+
+    // Singleton pattern.
+    // Singleton instance.
+    private static MainWindowController instance;
+    private MainWindowController(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
         controller = Controller.getInstance();
         addEventsHandlers();
+    }
+
+    // Instance getter.
+    public static MainWindowController getInstance(MainWindow mainWindow) {
+        if (instance == null) {
+            instance = new MainWindowController(mainWindow);
+        }
+        return instance;
     }
 
     private void addEventsHandlers() {
@@ -40,5 +52,10 @@ public class MainWindowController {
         mainWindow.stopPlayButton.addActionListener(event -> {
             controller.stop();
         });
+    }
+
+    public void addEventToTable(String event) {
+        var temp = event.split(",");
+        mainWindow.tableModel.addRow(temp);
     }
 }
