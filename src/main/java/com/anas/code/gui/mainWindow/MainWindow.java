@@ -1,10 +1,12 @@
 package com.anas.code.gui.mainWindow;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class MainWindow extends JFrame {
     // TODO: Add your GUI components here
     protected JTable eventsTable; // Table of events
+    protected DefaultTableModel tableModel; // Table model
     protected JScrollPane eventsTableScrollPane; // Scroll pane of the table
     protected JCheckBox mouseCheckBox, keyboardCheckBox; // Check boxes for mouse and keyboard events
     protected JButton startRecodingButton, stopRecordingButton; // Buttons for start and stop recording
@@ -19,13 +21,20 @@ public class MainWindow extends JFrame {
         initWindow();
 
         // Add the controller to the window.
-        controller = new MainWindowController(this);
+        controller = MainWindowController.getInstance(this);
+
+        // Add columns to the table model.
+        tableModel.addColumn("No.");
+        tableModel.addColumn("Event");
+        tableModel.addColumn("is active");
     }
 
     // Initializes the window components.
     private void initComponents() {
+        // Initialize the table model.
+        tableModel = new DefaultTableModel();
         // initialize the table.
-        eventsTable = new JTable(0, 3);
+        eventsTable = new JTable(tableModel);
         // Initialize the scroll pane.
         eventsTableScrollPane = new JScrollPane(eventsTable);
         // Initialize the check boxes.
@@ -73,6 +82,11 @@ public class MainWindow extends JFrame {
         add(stopRecordingButton);
         add(playButton);
         add(stopPlayButton);
+    }
+
+    // Getters
+    public MainWindowController getController() {
+        return controller;
     }
 
     // Test main method.
