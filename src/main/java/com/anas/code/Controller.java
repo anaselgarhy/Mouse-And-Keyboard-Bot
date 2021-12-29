@@ -1,5 +1,7 @@
 package com.anas.code;
 
+import com.anas.code.gui.mainWindow.MainWindowController;
+
 public class Controller {
 
     // Singleton pattern
@@ -17,6 +19,7 @@ public class Controller {
 
     public void startRecording() {
         System.out.println("Recording started");
+        MainWindowController.getInstance(null).addEventToTable("1,ee,i");
     }
 
     public void stopRecording() {
