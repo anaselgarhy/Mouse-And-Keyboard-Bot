@@ -1,20 +1,44 @@
 package com.anas.code.gui.mainWindow;
 
-import com.anas.code.gui.mainWindow.MainWindow;
+import com.anas.code.Controller;
 
-public record MainWindowController(MainWindow mainWindow) {
+public class MainWindowController {
+    private final MainWindow mainWindow;
+    private final Controller controller;
     public MainWindowController(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
+        controller = Controller.getInstance();
         addEventsHandlers();
     }
 
     private void addEventsHandlers() {
+        // CheckBox's events
+        addCheckBoxesHandlers();
+        // Button's events
+        addButtonsHandlers();
+    }
+
+    private void addCheckBoxesHandlers() {
         mainWindow.mouseCheckBox.addActionListener(event -> {
-            if (mainWindow.mouseCheckBox.isSelected()) {
-                mainWindow.mouseCheckBox.setText("Mouse: ON");
-            } else {
-                mainWindow.mouseCheckBox.setText("Mouse: OFF");
-            }
+
+        });
+        mainWindow.keyboardCheckBox.addActionListener(event -> {
+
+        });
+    }
+
+    private void addButtonsHandlers() {
+        mainWindow.startRecodingButton.addActionListener(event -> {
+            controller.startRecording();
+        });
+        mainWindow.stopRecordingButton.addActionListener(event -> {
+            controller.stopRecording();
+        });
+        mainWindow.playButton.addActionListener(event -> {
+            controller.play();
+        });
+        mainWindow.stopPlayButton.addActionListener(event -> {
+            controller.stop();
         });
     }
 }
